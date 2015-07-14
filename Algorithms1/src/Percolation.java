@@ -1,7 +1,7 @@
 public class Percolation {
 	private static final int OPEN = 1;
 	int grid[][];
-	int N;
+	int size;
 	WeightedQuickUnionUF uf;
 
 	public Percolation(int N) {
@@ -9,7 +9,7 @@ public class Percolation {
 			throw new IllegalArgumentException(
 					"Illegal argument exception -N<0 =" + N);
 		}
-		this.N = N;
+		size= N;
 		grid = new int[N][N];
 		uf = new WeightedQuickUnionUF((N * N) + 2);
 
@@ -22,26 +22,26 @@ public class Percolation {
 		grid[i][j] = OPEN;
 		if (j > 0 && grid[i][j - 1] == OPEN)
 			uf.union(xyTo1D(i, j), xyTo1D(i, j - 1));
-		if (j < N - 1 && grid[i][j + 1] == OPEN)
+		if (j < size - 1 && grid[i][j + 1] == OPEN)
 			uf.union(xyTo1D(i, j), xyTo1D(i, j + 1));
 		if (i > 0 && grid[i - 1][j] == OPEN)
 			uf.union(xyTo1D(i, j), xyTo1D(i - 1, j));
-		if (i < N - 1 && grid[i + 1][j] == OPEN)
+		if (i < size - 1 && grid[i + 1][j] == OPEN)
 			uf.union(xyTo1D(i, j), xyTo1D(i + 1, j));
 		if (i == 0) {
 			uf.union(xyTo1D(i, j), 0);
-		} else if (i == N - 1) {
-			uf.union(xyTo1D(i, j), (N * N) + 1);
+		} else if (i == size - 1) {
+			uf.union(xyTo1D(i, j), (size * size) + 1);
 		}
 	}
 
 	private void validate(int i, int j) {
-		if (i < 0 || i > N - 1) {
+		if (i < 0 || i > size - 1) {
 			throw new IndexOutOfBoundsException("1st index " + i
-					+ " is not between 0 and " + N);
-		} else if (j < 0 || j > N - 1) {
+					+ " is not between 0 and " + size);
+		} else if (j < 0 || j > size - 1) {
 			throw new IndexOutOfBoundsException("2nd index " + j
-					+ " is not between 0 and " + N);
+					+ " is not between 0 and " + size);
 		}
 	}
 
@@ -58,7 +58,7 @@ public class Percolation {
 
 	public int xyTo1D(int x, int y) {
 		validate(x, y);
-		return x * N + y + 1;
+		return x * size + y + 1;
 	}
 
 	public boolean isFull(int i, int j) {
@@ -73,7 +73,7 @@ public class Percolation {
 	}
 
 	public boolean percolates() {
-		return uf.connected(0, (N * N) + 1);
+		return uf.connected(0, (size * size) + 1);
 	}
 
 	public static void main(String[] args) {
